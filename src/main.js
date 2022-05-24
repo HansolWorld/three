@@ -17,9 +17,15 @@ renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+const cubeTextureLoader = new THREE.CubeTextureLoader()
+
 // Scene
 const scene = new THREE.Scene();
-// scene.background = new THREE.Color('white');
+scene.background = cubeTextureLoader.load([
+	"/obj/stars.jpg", "/obj/stars.jpg",
+	"/obj/stars.jpg", "/obj/stars.jpg",
+	"/obj/stars.jpg", "/obj/stars.jpg"
+])
 
 // Camera
 const camera = new THREE.PerspectiveCamera(
@@ -28,7 +34,7 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000
 );
-camera.position.set(0, 50, 100);
+camera.position.set(0, 100, 100);
 camera.lookAt(0, 0, 0)
 scene.add(camera);
 
@@ -37,22 +43,10 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 
 // Light
-const ambientLight = new THREE.AmbientLight('white', 1);
+const ambientLight = new THREE.AmbientLight('white', 2);
 scene.add(ambientLight);
 
-// const spotLight = new THREE.SpotLight('white', 0.7);
-// spotLight.position.set(0, 0, 0);
-// spotLight.castShadow = true;
-// spotLight.shadow.mapSize.width = 1024;
-// spotLight.shadow.mapSize.height = 1024;
-// spotLight.shadow.camera.near = 1;
-// spotLight.shadow.camera.far = 200;
-// scene.add(spotLight);
-
-// const lightHelper = new THREE.SpotLightHelper(spotLight);
-// scene.add(lightHelper);
-
-const gltfLoader = new GLTFLoader();
+// const gltfLoader = new GLTFLoader();
 
 // // Mesh
 // const floorMesh = new THREE.Mesh(
@@ -69,9 +63,32 @@ const gltfLoader = new GLTFLoader();
 // const earth = new Planet({ gltfLoader, scene, modelSrc: '/obj/EarthClouds.glb', x: 10, ratio: 1});
 // const mars = new Planet({ gltfLoader, scene, modelSrc: '/obj/Mars.glb', x: 15, ratio: 0.52});
 
+const geometry = new THREE.CircleGeometry( 20, 50 );
+const wireframe = new THREE.WireframeGeometry(geometry)
+const line = new THREE.LineSegments( wireframe );
+line.rotation.x = -Math.PI/2
+scene.add( line )
 
-const sun = new Planet(8, 0, "/obj/sun.jpeg").getMesh();
+
+
+const sunPlanet = new Planet(8, 0, "/obj/sun.jpeg");
+const sun = sunPlanet.getMesh()
+const sunGeometry = sunPlanet.geometry
 scene.add(sun)
+
+// console.log(geometry.attributes.position.array):
+const positionArray = sunGeometry.attributes.position.array;
+const randomArray = [];
+for (var i = 0; i < positionArray.length; i += 3) {
+  positionArray[i] += (Math.random() - 0.5) * 0.2;
+  positionArray[i + 1] += (Math.random() - 0.5) * 0.2;
+  positionArray[i + 2] += (Math.random() - 0.5) * 0.2;
+
+  randomArray[i] = (Math.random() - 0.5) * 0.2;
+  randomArray[i + 1] = (Math.random() - 0.5) * 0.2;
+  randomArray[i + 2] = (Math.random() - 0.5) * 0.2;
+}
+
 
 const mercury = new Planet(2, 20, "/obj/mercury.png").getMesh();
 const mercuryGroup = new THREE.Group()
@@ -96,26 +113,36 @@ scene.add(marsGroup)
 
 // 그리기
 const clock = new THREE.Clock();
+let time = 0
 
 function draw() {
 	const delta = clock.getDelta();
 
 	// sunGroup.rotation.y += delta
-	mercuryGroup.rotation.y += delta / 2.4
-	venusGroup.rotation.y += delta / 6.2
-	earthGroup.rotation.y += delta / 10
-	marsGroup.rotation.y += delta / 19
+	mercuryGroup.rotation.y += delta / 0.24
+	venusGroup.rotation.y += delta / 0.62
+	earthGroup.rotation.y += delta / 1
+	marsGroup.rotation.y += delta / 1.9
 	
-	sun.rotation.y += delta / 0.7
-	mercury.rotation.y += delta / 1.6
-	venus.rotation.y += delta / 6.7
-	earth.rotation.y += delta / 0.02
-	mars.rotation.y += delta / 0.02
+	sun.rotation.y += delta / 0.07
+	mercury.rotation.y += delta / 0.16
+	venus.rotation.y += delta / 0.67
+	earth.rotation.y += delta / 0.0027
+	mars.rotation.y += delta / 0.0028
 	
+	for (var i = 0; i < positionArray.length; i += 3) {
+		positionArray[i] += Math.sin(time + randomArray[i] * 100) * 0.05;
+		positionArray[i + 1] += Math.sin(time + randomArray[i + 1] * 100) * 0.05;
+		positionArray[i + 2] += Math.sin(time + randomArray[i + 2] * 100) * 0.05;
+	}
+	
+	sunGeometry.attributes.position.needsUpdate = true;
+	time++
 
 	renderer.render(scene, camera);
 	renderer.setAnimationLoop(draw);
 }
+
 
 function setSize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -124,8 +151,6 @@ function setSize() {
 	renderer.render(scene, camera);
 }
 
-// 이벤트
-// window.addEventListener('scroll', setSection);
 window.addEventListener('resize', setSize);
 
 draw();
