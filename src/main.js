@@ -42,6 +42,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const ambientLight = new THREE.AmbientLight('white', 2);
 scene.add(ambientLight);
 
+// Mesh
+const sunPlanet = new Planet(8, 0, "./img/sun.jpeg");
+const sun = sunPlanet.getMesh()
+const sunGeometry = sunPlanet.geometry
+scene.add(sun)
 
 const positionArray = sunGeometry.attributes.position.array;
 const randomArray = [];
@@ -54,12 +59,6 @@ for (var i = 0; i < positionArray.length; i += 3) {
   randomArray[i + 1] = (Math.random() - 0.5) * 0.2;
   randomArray[i + 2] = (Math.random() - 0.5) * 0.2;
 }
-
-// Mesh
-const sunPlanet = new Planet(8, 0, "./img/sun.jpeg");
-const sun = sunPlanet.getMesh()
-const sunGeometry = sunPlanet.geometry
-scene.add(sun)
 
 const mercury = new Planet(1, 20, "./img/mercury.png")
 const mercuryGroup = new THREE.Group()
