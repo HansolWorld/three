@@ -1,7 +1,7 @@
 {
   "name": "threejs-study",
   "version": "1.0.0",
-  "description": "1. 패키지 설치    터미널에 아래 점선 사이의 내용을 붙여 넣고 엔터를 누르세요.",
+  "description": "three_study page",
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress",

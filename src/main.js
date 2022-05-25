@@ -21,9 +21,9 @@ const cubeTextureLoader = new THREE.CubeTextureLoader()
 // Scene
 const scene = new THREE.Scene();
 scene.background = cubeTextureLoader.load([
-	"/obj/stars.jpg", "/obj/stars.jpg",
-	"/obj/stars.jpg", "/obj/stars.jpg",
-	"/obj/stars.jpg", "/obj/stars.jpg"
+	"./img/stars.jpg", "./img/stars.jpg",
+	"./img/stars.jpg", "./img/stars.jpg",
+	"./img/stars.jpg", "./img/stars.jpg"
 ])
 
 // Camera
@@ -56,11 +56,11 @@ scene.add(ambientLight);
 // floorMesh.receiveShadow = true;
 // scene.add(floorMesh);
 
-// const sun = new Planet({ gltfLoader, scene, modelSrc: '/obj/Sun.glb', x: 0, ratio: 109});
-// const mercury = new Planet({ gltfLoader, scene, modelSrc: '/obj/Mercury.glb', x: 4, ratio: 0.38});
-// const venus = new Planet({ gltfLoader, scene, modelSrc: '/obj/Venus.glb', x: 7, ratio: 0.95});
-// const earth = new Planet({ gltfLoader, scene, modelSrc: '/obj/EarthClouds.glb', x: 10, ratio: 1});
-// const mars = new Planet({ gltfLoader, scene, modelSrc: '/obj/Mars.glb', x: 15, ratio: 0.52});
+// const sun = new Planet({ gltfLoader, scene, modelSrc: './img/Sun.glb', x: 0, ratio: 109});
+// const mercury = new Planet({ gltfLoader, scene, modelSrc: './img/Mercury.glb', x: 4, ratio: 0.38});
+// const venus = new Planet({ gltfLoader, scene, modelSrc: './img/Venus.glb', x: 7, ratio: 0.95});
+// const earth = new Planet({ gltfLoader, scene, modelSrc: './img/EarthClouds.glb', x: 10, ratio: 1});
+// const mars = new Planet({ gltfLoader, scene, modelSrc: './img/Mars.glb', x: 15, ratio: 0.52});
 
 // const geometry = new THREE.CircleGeometry( 20, 50 );
 // const wireframe = new THREE.WireframeGeometry(geometry)
@@ -68,7 +68,7 @@ scene.add(ambientLight);
 // line.rotation.x = -Math.PI/2
 // scene.add( line )
 
-const sunPlanet = new Planet(8, 0, "/obj/sun.jpeg");
+const sunPlanet = new Planet(8, 0, "./img/sun.jpeg");
 const sun = sunPlanet.getMesh()
 const sunGeometry = sunPlanet.geometry
 scene.add(sun)
@@ -87,22 +87,22 @@ for (var i = 0; i < positionArray.length; i += 3) {
 }
 
 
-const mercury = new Planet(1, 20, "/obj/mercury.png")
+const mercury = new Planet(1, 20, "./img/mercury.png")
 const mercuryGroup = new THREE.Group()
 mercuryGroup.add(mercury.getMesh())
 scene.add(mercuryGroup, mercury.getPath())
 
-const venus = new Planet(2.5, 35, "/obj/venus.jpeg")
+const venus = new Planet(2.5, 35, "./img/venus.jpeg")
 const venusGroup = new THREE.Group()
 venusGroup.add(venus.getMesh())
 scene.add(venusGroup, venus.getPath())
 
-const earth = new Planet(2.6, 50, "/obj/earth.jpeg")
+const earth = new Planet(2.6, 50, "./img/earth.jpeg")
 const earthGroup = new THREE.Group()
 earthGroup.add(earth.getMesh())
 scene.add(earthGroup, earth.getPath())
 
-const mars = new Planet(1.4, 75, "/obj/mars.jpeg")
+const mars = new Planet(1.4, 75, "./img/mars.jpeg")
 const marsGroup = new THREE.Group()
 marsGroup.add(mars.getMesh())
 scene.add(marsGroup, mars.getPath())
