@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress",
-    "start": "webpack serve --progress"
+    "start": "webpack serve --progress",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
     "webpack-dev-server": "^4.9.0"
   },
   "dependencies": {
+    "gh-pages": "^4.0.0",
     "gsap": "^3.10.4",
     "three": "^0.140.2"
   },

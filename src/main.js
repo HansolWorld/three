@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Planet } from './Planet';
 import gsap from 'gsap';
@@ -34,12 +33,12 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000
 );
-camera.position.set(0, 100, 100);
+camera.position.set(0, 80, 100);
 camera.lookAt(0, 0, 0)
 scene.add(camera);
 
-// Controls
-const controls = new OrbitControls(camera, renderer.domElement);
+// // Controls
+// const controls = new OrbitControls(camera, renderer.domElement);
 
 
 // Light
@@ -63,13 +62,11 @@ scene.add(ambientLight);
 // const earth = new Planet({ gltfLoader, scene, modelSrc: '/obj/EarthClouds.glb', x: 10, ratio: 1});
 // const mars = new Planet({ gltfLoader, scene, modelSrc: '/obj/Mars.glb', x: 15, ratio: 0.52});
 
-const geometry = new THREE.CircleGeometry( 20, 50 );
-const wireframe = new THREE.WireframeGeometry(geometry)
-const line = new THREE.LineSegments( wireframe );
-line.rotation.x = -Math.PI/2
-scene.add( line )
-
-
+// const geometry = new THREE.CircleGeometry( 20, 50 );
+// const wireframe = new THREE.WireframeGeometry(geometry)
+// const line = new THREE.LineSegments( wireframe );
+// line.rotation.x = -Math.PI/2
+// scene.add( line )
 
 const sunPlanet = new Planet(8, 0, "/obj/sun.jpeg");
 const sun = sunPlanet.getMesh()
@@ -90,25 +87,27 @@ for (var i = 0; i < positionArray.length; i += 3) {
 }
 
 
-const mercury = new Planet(2, 20, "/obj/mercury.png").getMesh();
+const mercury = new Planet(1, 20, "/obj/mercury.png")
 const mercuryGroup = new THREE.Group()
-mercuryGroup.add(mercury)
-scene.add(mercuryGroup)
+mercuryGroup.add(mercury.getMesh())
+scene.add(mercuryGroup, mercury.getPath())
 
-const venus = new Planet(3, 35, "/obj/venus.jpeg").getMesh();
+const venus = new Planet(2.5, 35, "/obj/venus.jpeg")
 const venusGroup = new THREE.Group()
-venusGroup.add(venus)
-scene.add(venusGroup)
+venusGroup.add(venus.getMesh())
+scene.add(venusGroup, venus.getPath())
 
-const earth = new Planet(4, 50, "/obj/earth.jpeg").getMesh();
+const earth = new Planet(2.6, 50, "/obj/earth.jpeg")
 const earthGroup = new THREE.Group()
-earthGroup.add(earth)
-scene.add(earthGroup)
+earthGroup.add(earth.getMesh())
+scene.add(earthGroup, earth.getPath())
 
-const mars = new Planet(3, 75, "/obj/mars.jpeg").getMesh();
+const mars = new Planet(1.4, 75, "/obj/mars.jpeg")
 const marsGroup = new THREE.Group()
-marsGroup.add(mars)
-scene.add(marsGroup)
+marsGroup.add(mars.getMesh())
+scene.add(marsGroup, mars.getPath())
+
+
 
 
 // 그리기
@@ -125,10 +124,10 @@ function draw() {
 	marsGroup.rotation.y += delta / 1.9
 	
 	sun.rotation.y += delta / 0.07
-	mercury.rotation.y += delta / 0.16
-	venus.rotation.y += delta / 0.67
-	earth.rotation.y += delta / 0.0027
-	mars.rotation.y += delta / 0.0028
+	mercury.getMesh().rotation.y += delta / 0.16
+	venus.getMesh().rotation.y += delta / 0.67
+	earth.getMesh().rotation.y += delta / 0.0027
+	mars.getMesh().rotation.y += delta / 0.0028
 	
 	for (var i = 0; i < positionArray.length; i += 3) {
 		positionArray[i] += Math.sin(time + randomArray[i] * 100) * 0.05;
