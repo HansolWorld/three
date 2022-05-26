@@ -9,7 +9,7 @@ export class Planet {
 
 	getPath() {
 		const geometry = new THREE.TorusGeometry( this.positionX, 0.01, 2, 100 );
-		const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+		const material = new THREE.MeshBasicMaterial( { color: 0xffff00, wireframe: true } );
 		this.torus = new THREE.Mesh( geometry, material );
 		this.torus.rotation.x = -Math.PI/2
 		return this.torus

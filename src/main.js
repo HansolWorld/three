@@ -48,17 +48,17 @@ const sun = sunPlanet.getMesh()
 const sunGeometry = sunPlanet.geometry
 scene.add(sun)
 
-const positionArray = sunGeometry.attributes.position.array;
-const randomArray = [];
-for (var i = 0; i < positionArray.length; i += 3) {
-  positionArray[i] += (Math.random() - 0.5) * 0.2;
-  positionArray[i + 1] += (Math.random() - 0.5) * 0.2;
-  positionArray[i + 2] += (Math.random() - 0.5) * 0.2;
+// const positionArray = sunGeometry.attributes.position.array;
+// const randomArray = [];
+// for (var i = 0; i < positionArray.length; i += 3) {
+//   positionArray[i] += (Math.random() - 0.5) * 0.2;
+//   positionArray[i + 1] += (Math.random() - 0.5) * 0.2;
+//   positionArray[i + 2] += (Math.random() - 0.5) * 0.2;
 
-  randomArray[i] = (Math.random() - 0.5) * 0.2;
-  randomArray[i + 1] = (Math.random() - 0.5) * 0.2;
-  randomArray[i + 2] = (Math.random() - 0.5) * 0.2;
-}
+//   randomArray[i] = (Math.random() - 0.5) * 0.2;
+//   randomArray[i + 1] = (Math.random() - 0.5) * 0.2;
+//   randomArray[i + 2] = (Math.random() - 0.5) * 0.2;
+// }
 
 const mercury = new Planet(1, 20, "./img/mercury.png")
 const mercuryGroup = new THREE.Group()
@@ -72,7 +72,12 @@ scene.add(venusGroup, venus.getPath())
 
 const earth = new Planet(2.6, 50, "./img/earth.jpeg")
 const earthGroup = new THREE.Group()
-earthGroup.add(earth.getMesh())
+
+const moon = new Planet(1, 0, "./img/earth.jpeg")
+const moonGroup = new THREE.Group()
+moonGroup.add(moon.getMesh())
+moonGroup.position.x = 6
+earthGroup.add(earth.getMesh(), moonGroup)
 scene.add(earthGroup, earth.getPath())
 
 const mars = new Planet(1.4, 75, "./img/mars.jpeg")
@@ -92,6 +97,7 @@ function draw() {
 	mercuryGroup.rotation.y += delta / 0.24
 	venusGroup.rotation.y += delta / 0.62
 	earthGroup.rotation.y += delta / 1
+	moonGroup.rotation.y += delta
 	marsGroup.rotation.y += delta / 1.9
 	
 	sun.rotation.y += delta / 0.07
@@ -100,14 +106,14 @@ function draw() {
 	earth.getMesh().rotation.y += delta / 0.0027
 	mars.getMesh().rotation.y += delta / 0.0028
 	
-	for (var i = 0; i < positionArray.length; i += 3) {
-		positionArray[i] += Math.sin(time + randomArray[i] * 100) * 0.05;
-		positionArray[i + 1] += Math.sin(time + randomArray[i + 1] * 100) * 0.05;
-		positionArray[i + 2] += Math.sin(time + randomArray[i + 2] * 100) * 0.05;
-	}
+	// for (var i = 0; i < positionArray.length; i += 3) {
+	// 	positionArray[i] += Math.sin(time + randomArray[i] * 100) * 0.05;
+	// 	positionArray[i + 1] += Math.sin(time + randomArray[i + 1] * 100) * 0.05;
+	// 	positionArray[i + 2] += Math.sin(time + randomArray[i + 2] * 100) * 0.05;
+	// }
 	
-	sunGeometry.attributes.position.needsUpdate = true;
-	time++
+	// sunGeometry.attributes.position.needsUpdate = true;
+	// time++
 
 	renderer.render(scene, camera);
 	renderer.setAnimationLoop(draw);
