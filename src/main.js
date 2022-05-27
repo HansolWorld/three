@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Planet } from "./Planet";
+import {getLabel, getPath} from "./Utils"
 import gsap from "gsap";
 
 // Renderer
@@ -10,13 +11,13 @@ const renderer = new THREE.WebGLRenderer({
 	canvas,
 	antialias: true
 });
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight*0.8);
 renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const labelRenderer = new CSS2DRenderer();
-labelRenderer.setSize( window.innerWidth, window.innerHeight );
+labelRenderer.setSize( window.innerWidth, window.innerHeight*0.8);
 labelRenderer.domElement.style.position = 'absolute';
 labelRenderer.domElement.style.top = '0px';
 document.body.appendChild( labelRenderer.domElement );
@@ -34,11 +35,11 @@ scene.background = cubeTextureLoader.load([
 // Camera
 const camera = new THREE.PerspectiveCamera(
 	75,
-	window.innerWidth / window.innerHeight,
+	window.innerWidth / window.innerHeight * 0.8,
 	0.1,
 	1000
 );
-camera.position.set(0, 0, 100);
+camera.position.set(0, 80, 100);
 camera.lookAt(0, 0, 0)
 scene.add(camera);
 
@@ -50,19 +51,8 @@ scene.add(ambientLight);
 // Mesh
 const sunPlanet = new Planet(8, 0, "./img/sun.jpeg");
 const sun = sunPlanet.getMesh()
-sun.layers.enableAll()
+getLabel(sun, "Home", 8)
 scene.add(sun)
-
-const sunDiv = document.createElement("div");
-sunDiv.className = "label";
-sunDiv.textContent = "About Me";
-sunDiv.style.marginTop = "-1em";
-console.log(sunDiv)
-const sunLabel = new CSS2DObject(sunDiv);
-sunLabel.position.set( 0, 8, 0 );
-sun.add( sunLabel );
-sunLabel.layers.set( 1 );
-
 
 // Controls
 const controls = new OrbitControls(camera, labelRenderer.domElement);
@@ -70,17 +60,21 @@ const controls = new OrbitControls(camera, labelRenderer.domElement);
 
 const mercury = new Planet(1, 20, "./img/mercury.png")
 const mercuryGroup = new THREE.Group()
+getLabel(mercury.getMesh(), "About Me", 1)
+
 mercuryGroup.add(mercury.getMesh())
 scene.add(mercuryGroup, mercury.getPath())
 
 const venus = new Planet(2.5, 35, "./img/venus.jpeg")
 const venusGroup = new THREE.Group()
+getLabel(venus.getMesh(), "Project", 2.5)
 venusGroup.add(venus.getMesh())
 scene.add(venusGroup, venus.getPath())
 
 const earth = new Planet(2.6, 0, "./img/earth.jpeg")
+const earthPath = getPath(50)
 const earthGroup = new THREE.Group()
-
+getLabel(earth.getMesh(), "Contact Me", 2.6)
 const moon = new Planet(0.4, 0, "./img/moon.jpg")
 const moonGroup = new THREE.Group()
 const moonRotationGroup = new THREE.Group()
@@ -90,10 +84,11 @@ moonRotationGroup.position.x = 50
 moonRotationGroup.add(earth.getMesh(), moonGroup)
 earthGroup.add(moonRotationGroup)
 
-scene.add(earthGroup, earth.getPath())
+scene.add(earthGroup, earth.getPath(), earthPath)
 
 const mars = new Planet(1.4, 75, "./img/mars.jpeg")
 const marsGroup = new THREE.Group()
+getLabel(mars.getMesh(), "Works", 1.4)
 marsGroup.add(mars.getMesh())
 scene.add(marsGroup, mars.getPath())
 
@@ -134,10 +129,10 @@ function draw() {
 
 
 function setSize() {
-	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.aspect = window.innerWidth / window.innerHeight*0.8;
 	camera.updateProjectionMatrix();
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	labelRenderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setSize(window.innerWidth, window.innerHeight*0.8);
+	labelRenderer.setSize( window.innerWidth, window.innerHeight*0.8);
 }
 
 window.addEventListener("resize", setSize);
