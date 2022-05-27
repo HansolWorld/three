@@ -1,8 +1,16 @@
 body {
 	margin: 0;
 }
+
 #three-canvas {
 	position: fixed;
 	left: 0;
 	top: 0;
+}
+
+.label {
+	color: #FFF;
+	font-family: sans-serif;
+	padding: 2px;
+	background: rgba( 0, 0, 0, .6 );
 }

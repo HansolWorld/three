@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { Planet } from './Planet';
 import gsap from 'gsap';
 
@@ -33,6 +34,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 80, 100);
 camera.lookAt(0, 0, 0)
+camera.layers.enableAll()
 scene.add(camera);
 
 // // Controls
@@ -40,25 +42,23 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 // Light
 const ambientLight = new THREE.AmbientLight('white', 2);
+ambientLight.layers.enableAll()
 scene.add(ambientLight);
 
 // Mesh
 const sunPlanet = new Planet(8, 0, "./img/sun.jpeg");
 const sun = sunPlanet.getMesh()
-const sunGeometry = sunPlanet.geometry
+sun.layers.enableAll()
 scene.add(sun)
 
-// const positionArray = sunGeometry.attributes.position.array;
-// const randomArray = [];
-// for (var i = 0; i < positionArray.length; i += 3) {
-//   positionArray[i] += (Math.random() - 0.5) * 0.2;
-//   positionArray[i + 1] += (Math.random() - 0.5) * 0.2;
-//   positionArray[i + 2] += (Math.random() - 0.5) * 0.2;
-
-//   randomArray[i] = (Math.random() - 0.5) * 0.2;
-//   randomArray[i + 1] = (Math.random() - 0.5) * 0.2;
-//   randomArray[i + 2] = (Math.random() - 0.5) * 0.2;
-// }
+const sunDiv = document.createElement( 'div' );
+sunDiv.className = 'label';
+sunDiv.textContent = 'Sun';
+sunDiv.style.marginTop = '-1em';
+const sunLabel = new CSS2DObject( sunDiv );
+sunLabel.position.set( 0, 8, 0 );
+sun.add( sunLabel );
+sunLabel.layers.set( 1 );
 
 const mercury = new Planet(1, 20, "./img/mercury.png")
 const mercuryGroup = new THREE.Group()
@@ -70,14 +70,18 @@ const venusGroup = new THREE.Group()
 venusGroup.add(venus.getMesh())
 scene.add(venusGroup, venus.getPath())
 
-const earth = new Planet(2.6, 50, "./img/earth.jpeg")
+const earth = new Planet(2.6, 0, "./img/earth.jpeg")
 const earthGroup = new THREE.Group()
 
-const moon = new Planet(1, 0, "./img/earth.jpeg")
+const moon = new Planet(0.4, 0, "./img/moon.jpg")
 const moonGroup = new THREE.Group()
+const moonRotationGroup = new THREE.Group()
 moonGroup.add(moon.getMesh())
 moonGroup.position.x = 6
-earthGroup.add(earth.getMesh(), moonGroup)
+moonRotationGroup.position.x = 50
+moonRotationGroup.add(earth.getMesh(), moonGroup)
+earthGroup.add(moonRotationGroup)
+
 scene.add(earthGroup, earth.getPath())
 
 const mars = new Planet(1.4, 75, "./img/mars.jpeg")
@@ -97,13 +101,13 @@ function draw() {
 	mercuryGroup.rotation.y += delta / 0.24
 	venusGroup.rotation.y += delta / 0.62
 	earthGroup.rotation.y += delta / 1
-	moonGroup.rotation.y += delta
+	moonRotationGroup.rotation.y += delta * 0.27
 	marsGroup.rotation.y += delta / 1.9
 	
 	sun.rotation.y += delta / 0.07
 	mercury.getMesh().rotation.y += delta / 0.16
 	venus.getMesh().rotation.y += delta / 0.67
-	earth.getMesh().rotation.y += delta / 0.0027
+	// earth.getMesh().rotation.y += delta / 0.0027
 	mars.getMesh().rotation.y += delta / 0.0028
 	
 	// for (var i = 0; i < positionArray.length; i += 3) {

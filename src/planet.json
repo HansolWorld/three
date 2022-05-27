@@ -1,0 +1,32 @@
+{
+    "sun": {
+        "surface": "./img/sun.jpeg",
+        "size": 8,
+        "position": 0
+    },
+    "mercury": {
+        "surface": "./img/mercury.jpeg",
+        "size": 1,
+        "position": 20
+    },
+    "venus": {
+        "surface": "./img/venus.jpeg",
+        "size": 2.5,
+        "position": 35
+    },
+    "earth": {
+        "surface": "./img/earth.jpeg",
+        "size": 2.6,
+        "position": 50
+    },
+    "moon": {
+        "surface": "./img/moon.jpeg",
+        "size": 0.4,
+        "position": 56
+    },
+    "mars": {
+        "surface": "./img/mars.jpeg",
+        "size": 1.4,
+        "position": 75
+    },
+}
