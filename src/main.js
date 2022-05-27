@@ -1,11 +1,11 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { Planet } from './Planet';
-import gsap from 'gsap';
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { Planet } from "./Planet";
+import gsap from "gsap";
 
 // Renderer
-const canvas = document.querySelector('#three-canvas');
+const canvas = document.querySelector("#three-canvas");
 const renderer = new THREE.WebGLRenderer({
 	canvas,
 	antialias: true
@@ -14,6 +14,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize( window.innerWidth, window.innerHeight );
+labelRenderer.domElement.style.position = 'absolute';
+labelRenderer.domElement.style.top = '0px';
+document.body.appendChild( labelRenderer.domElement );
 
 const cubeTextureLoader = new THREE.CubeTextureLoader()
 
@@ -32,17 +38,13 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000
 );
-camera.position.set(0, 80, 100);
+camera.position.set(0, 0, 100);
 camera.lookAt(0, 0, 0)
-camera.layers.enableAll()
 scene.add(camera);
 
-// // Controls
-const controls = new OrbitControls(camera, renderer.domElement);
 
 // Light
-const ambientLight = new THREE.AmbientLight('white', 2);
-ambientLight.layers.enableAll()
+const ambientLight = new THREE.AmbientLight("white", 2);
 scene.add(ambientLight);
 
 // Mesh
@@ -51,14 +53,20 @@ const sun = sunPlanet.getMesh()
 sun.layers.enableAll()
 scene.add(sun)
 
-const sunDiv = document.createElement( 'div' );
-sunDiv.className = 'label';
-sunDiv.textContent = 'Sun';
-sunDiv.style.marginTop = '-1em';
-const sunLabel = new CSS2DObject( sunDiv );
+const sunDiv = document.createElement("div");
+sunDiv.className = "label";
+sunDiv.textContent = "About Me";
+sunDiv.style.marginTop = "-1em";
+console.log(sunDiv)
+const sunLabel = new CSS2DObject(sunDiv);
 sunLabel.position.set( 0, 8, 0 );
 sun.add( sunLabel );
 sunLabel.layers.set( 1 );
+
+
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+
 
 const mercury = new Planet(1, 20, "./img/mercury.png")
 const mercuryGroup = new THREE.Group()
@@ -120,6 +128,7 @@ function draw() {
 	// time++
 
 	renderer.render(scene, camera);
+	labelRenderer.render( scene, camera );
 	renderer.setAnimationLoop(draw);
 }
 
@@ -128,9 +137,9 @@ function setSize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.render(scene, camera);
+	labelRenderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-window.addEventListener('resize', setSize);
+window.addEventListener("resize", setSize);
 
 draw();
