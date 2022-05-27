@@ -65,7 +65,7 @@ sunLabel.layers.set( 1 );
 
 
 // Controls
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, labelRenderer.domElement);
 
 
 const mercury = new Planet(1, 20, "./img/mercury.png")
@@ -129,7 +129,7 @@ function draw() {
 
 	renderer.render(scene, camera);
 	labelRenderer.render( scene, camera );
-	renderer.setAnimationLoop(draw);
+	requestAnimationFrame(draw);
 }
 
 
