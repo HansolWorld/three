@@ -1,5 +1,5 @@
 # three
-https://jayg9269.github.io/three/
+https://HansolWorld.github.io/three/
 
 ## npm
 - npm을 사용해 demo 실행
